@@ -1,0 +1,29 @@
+[project]
+name = "alyx-ssm"
+version = "0.1.0"
+description = "User Identification in VR applications using the who-is-alyx dataset"
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "faiss-gpu>=1.7.2",
+    "hydra-colorlog>=1.2.0",
+    "hydra-core>=1.2.0",
+    "matplotlib>=3.10.8",
+    "numpy==1.26.*",
+    "pandas>=2.3.3",
+    "pudb>=2025.1.5",
+    "pyarrow>=22.0.0",
+    "python-dotenv>=1.2.1",
+    "pytorch-lightning>=2.6.0",
+    "pytorch-metric-learning>=2.9.0",
+    "rich>=14.2.0",
+    "scikit-learn>=1.7.2",
+    "scipy>=1.15.3",
+    "seaborn>=0.13.2",
+    "sh>=2.2.2",
+    "tables>=3.10.1",
+    "torch>=2.9.1",
+    "torchvision>=0.24.1",
+    "tqdm>=4.67.1",
+    "wandb>=0.23.1",
+]
