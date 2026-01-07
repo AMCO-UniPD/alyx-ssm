@@ -1,0 +1,3 @@
+[submodule "machine_learning/src/models/ssm"]
+	path = machine_learning/src/models/ssm
+	url = https://github.com/AMCO-UniPD/ssm.git
