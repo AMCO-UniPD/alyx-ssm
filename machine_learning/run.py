@@ -1,3 +1,7 @@
+"""
+Python script to launch the training experiment
+"""
+
 import signal
 
 import dotenv

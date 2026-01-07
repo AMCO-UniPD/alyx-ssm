@@ -1,20 +1,27 @@
+"""
+Python script to generate the classification dataset to train the DL
+models starting from the hdf5 file generated with 01_aggregate.py
+"""
+
 import os
+import ipdb
 import pathlib
 import numpy as np
 import pandas as pd
 
 
 OUTPUT_DIR = pathlib.Path("./data/output")
+if not OUTPUT_DIR.exists():
+    os.makedirs(OUTPUT_DIR)
+
 FPS = 15
 NUMBER_OF_SUBJECTS = 71
 validation_interval_in_minutes = 5 # in minutes
 
-session_1_data = pd.read_hdf(OUTPUT_DIR.joinpath(f"{FPS}_fps_data_{NUMBER_OF_SUBJECTS}_subjects.hdf5"),
-                             key="subject_session_idx_0")
-session_2_data = pd.read_hdf(OUTPUT_DIR.joinpath(f"{FPS}_fps_data_{NUMBER_OF_SUBJECTS}_subjects.hdf5"),
-                             key="subject_session_idx_1")
+hdf_filepath = OUTPUT_DIR.joinpath(f"{FPS}_fps_data_{NUMBER_OF_SUBJECTS}_subjects.hdf5")
 
-
+session_1_data = pd.read_hdf(hdf_filepath,key="subject_session_idx_0")
+session_2_data = pd.read_hdf(hdf_filepath,key="subject_session_idx_1")
 
 OFFSET_FRAMES = FPS * 60 * 1
 CUTOFF_FRAMES = FPS * 60 * 1
@@ -30,7 +37,7 @@ assert len(subject_ids) == NUMBER_OF_SUBJECTS
 # taking last subject ids from shuffled data, so that test subjects of metric learning match the subjects of the classifier
 selected_subject_ids = subject_ids[-NUMBER_OF_SUBJECTS:]
 
-output_path = pathlib.Path(OUTPUT_DIR.joinpath(f"/{FPS}_fps_classifier_{len(selected_subject_ids)}_subjects.hdf5"))
+output_path = pathlib.Path(OUTPUT_DIR.joinpath(f"{FPS}_fps_classifier_{len(selected_subject_ids)}_subjects.hdf5"))
 
 if output_path.exists():
     os.remove(output_path)

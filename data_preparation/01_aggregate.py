@@ -1,6 +1,9 @@
-# %%
+"""
+Python script to aggregate the alyx data
+"""
 
 import os
+import ipdb
 
 from rich.console import Console
 from rich.progress import track
@@ -13,7 +16,8 @@ import pandas as pd
 pd.set_option("display.max_columns", None)
 pd.set_option('display.expand_frame_repr', False)
 
-WHO_IS_ALYX_DATA_REPOSITORY_PATH = pathlib.Path("data/input/who-is-alyx/")
+# WHO_IS_ALYX_DATA_REPOSITORY_PATH = pathlib.Path("data/input/who-is-alyx/")
+WHO_IS_ALYX_DATA_REPOSITORY_PATH = pathlib.Path("/mnt/disk1/davide_frizzo/datasets/who-is-alyx")
 TARGET_FPS = 15
 console = Console()
 
@@ -27,7 +31,7 @@ manual_start_timestamps  = {
 }
 
 
-# %% Mappings
+#NOTE: Column mappings
 
 column_mappings = {
     'hmd_pos_x': "head_pos_x",
@@ -56,8 +60,13 @@ column_mappings = {
 }
 
 # %%
+# output_path_old = pathlib.Path(f"data/intermediate/{TARGET_FPS}_fps_data_{len(relevant_subjects)}_subjects_.hdf5")
 
-output_path = pathlib.Path(f"data/intermediate/{TARGET_FPS}_fps_data_{len(relevant_subjects)}_subjects_.hdf5")
+datapath = pathlib.Path("data/intermediate/")
+if not datapath.exists():
+    os.makedirs(datapath)
+
+output_path = pathlib.Path(datapath.joinpath(f"{TARGET_FPS}_fps_data_{len(relevant_subjects)}_subjects_.hdf5"))
 
 if output_path.exists():
     os.remove(output_path)
@@ -67,6 +76,8 @@ take_id = -1
 session_id = -1
 
 # %%
+
+# for idx, session_info in relevant_subjects.iterrows():
 
 for idx, session_info in track(relevant_subjects.iterrows(), total=len(relevant_subjects)):
     player_dir = pathlib.Path(WHO_IS_ALYX_DATA_REPOSITORY_PATH.joinpath(f"players/{session_info['player_id']:02d}/"))
@@ -93,7 +104,7 @@ for idx, session_info in track(relevant_subjects.iterrows(), total=len(relevant_
 
             if before_length > after_length:
                 length = session_data["timestamp"].iloc[-1] - session_data["timestamp"].iloc[0]
-                # console.log(f"removed {before_length - after_length} frames from {csv_path}: start was {orig_session_start}, now is {start_timestamp}, duration is now {length}")
+                console.log(f"removed {before_length - after_length} frames from {csv_path}: start was {orig_session_start}, now is {start_timestamp}, duration is now {length}")
             session_data.index = pd.to_timedelta(session_data.index, unit="ms")
 
             features = session_data[select_features].copy()

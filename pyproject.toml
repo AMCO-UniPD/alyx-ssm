@@ -8,6 +8,7 @@ dependencies = [
     "faiss-gpu>=1.7.2",
     "hydra-colorlog>=1.2.0",
     "hydra-core>=1.2.0",
+    "ipdb>=0.13.13",
     "matplotlib>=3.10.8",
     "numpy==1.26.*",
     "pandas>=2.3.3",
