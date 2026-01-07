@@ -31,9 +31,10 @@ For example, to train the winner CNN+BRA model run:
 ```bash
 python run.py +experiments/who_is_alyx=winner_bra_model
 ```
+
 Note, that we use [Weights and Biases](https://wandb.ai) for monitoring the training, which is currently tightly integrated with our code, so you probably need a (free) account. We
 plan to make this an optional requirement in the future.
 
 ## Sweep Configs
 
-You find the configuration files for the hyperparameter sweeps we did with Weights & Biases in the folder `wandb_sweep_cofnigs/who_is_alyx`.
+You find the configuration files for the hyperparameter sweeps we did with Weights & Biases in the folder `wandb_sweep_configs/who_is_alyx`.
