@@ -21,6 +21,3 @@ class CNNLayer(nn.Module):
 
     def forward(self, x):
         return self.ops(x)
-
-
-
