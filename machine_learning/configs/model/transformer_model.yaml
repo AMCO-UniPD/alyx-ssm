@@ -1,0 +1,8 @@
+_target_: src.models.transformer_model.TransformerModel
+
+defaults:
+  - hyperparameters: transformer_hyperparameters.yaml
+
+num_features: MISSING
+num_out_classes: MISSING
+window_size: MISSING

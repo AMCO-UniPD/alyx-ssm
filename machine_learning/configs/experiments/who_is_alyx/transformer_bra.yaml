@@ -1,0 +1,65 @@
+# @package _global_
+
+defaults:
+  - override /model: transformer_model.yaml
+  - override /datamodule: window_datamodule.yaml
+  - override /lightning_module: classification_module.yaml
+  - override /callbacks: cnn_classification.yaml
+
+run_group: cnn_bra
+
+cache_datamodule: False
+
+seed: 42
+
+logger:
+  wandb:
+    project: "Who-Is-Alyx"
+    entity: ""
+
+trainer:
+  #gpus: 1 # deprecated
+  accelerator: gpu
+  devices: 1
+  min_epochs: 20
+  max_epochs: 20
+  #auto_scale_batch_size: True # deprecated
+  check_val_every_n_epoch: 1
+
+tuner:
+  scale_batch_size:
+    enabled: True
+    mode: "power"
+    #init_val: 16 # handled by datamodule config
+    max_trials: 8
+
+model:
+  num_out_classes: "auto"
+  window_size: ${datamodule.data_hyperparameters.window_size}
+  hyperparameters:
+    num_layers: 2
+    dropout: 0.2
+    hidden_size: 128
+    d_ff: 64
+    n_heads: 8
+
+datamodule:
+  data_path: ${data_dir}/15_fps_classifier_71_subjects.hdf5
+  batch_size: 200
+
+  dataset_kwargs:
+    debug_mode: False
+    coordinate_system:
+      forward: "x"
+      right: "z"
+      up: "y"
+  data_hyperparameters:
+    original_fps: 15
+    fps: 15
+    window_size: 300
+    data_encoding:
+      value: "body_relative_acceleration"
+
+lightning_module:
+  optimizer_options:
+    lr: 0.002
