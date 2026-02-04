@@ -3,7 +3,7 @@ import torch
 from torch import nn
 
 from src.models._tcn_layer import TCNLayer
-from src.hyperparameters.cnn_hyperparameters import CNNHyperparameters 
+from src.hyperparameters.cnn_hyperparameters import CNNHyperparameters
 
 
 class TCNModel(nn.Module):
@@ -18,15 +18,17 @@ class TCNModel(nn.Module):
         for layer_idx in range(self.hparams.num_layers):
             out_channels = int(self.hparams.initial_channel_size *
                                self.hparams.channels_factor**layer_idx)
-            layers.append(TCNLayer(
-                in_channels=in_channels,
-                out_channels=out_channels,
-                kernel_size=self.hparams.kernel_size,
-                conv_stride=1,
-                dropout=self.hparams.dropout,
-                activation=self.hparams.activation,
-                dilation=2**layer_idx
-            ))
+            layers.append(
+                TCNLayer(
+                    in_channels=in_channels,
+                    out_channels=out_channels,
+                    kernel_size=self.hparams.kernel_size,
+                    conv_stride=1,
+                    dropout=self.hparams.dropout,
+                    activation=self.hparams.activation,
+                    dilation=2**layer_idx
+                )
+            )
             in_channels = out_channels  #next layer's in_channels
 
         self.tcn_layers = nn.Sequential(*layers)

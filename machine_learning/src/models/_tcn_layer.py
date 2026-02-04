@@ -9,7 +9,6 @@ class Chomp1d(nn.Module):
 
     def forward(self, x):
         return x[:, :, :-self.chomp_size]
-    
 
 class TCNLayer(nn.Module):
     def __init__(self,

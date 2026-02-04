@@ -2,15 +2,20 @@
 Python module implementing the Transformer model
 """
 
+import os
+import sys
 import math
 import torch
 from torch import nn
 
-from src.hyperparameter.transformer_hyperparameters import TransformerHyperparameters
+sys.path.append(os.path.join(os.path.abspath(__file__),"ssm"))
+
+from src.hyperparameters.transformer_hyperparameters import TransformerHyperparameters
+from src.models.ssm.src.models import ModelHead
 
 # Transformer Encoder
 from transformer_encoder import TransformerEncoder
-from transformer_encoder.utils import PositionalEncoding, WarmupOptimizer
+from transformer_encoder.utils import PositionalEncoding
 
 class DynamicPositionalEncoding(nn.Module):
     def __init__(self, d_model: int, dropout: float = 0.1):
@@ -50,23 +55,34 @@ class TransformerModel(nn.Module):
     ):
         super().__init__()
 
+        self.hparams = hyperparameters
+        self.num_out_classes = num_out_classes
 
         self.input_projection = nn.Linear(num_features, hyperparameters.hidden_size)
 
-
         self.dynamic_positional_encoding = DynamicPositionalEncoding(
-            d_model=hyperparameters.hidden_size,
-            dropout=hyperparameters.dropout
+            d_model=self.hparams.hidden_size,
+            dropout=self.hparams.dropout
         )
         self.encoder = TransformerEncoder(
-            d_model=hyperparameters.hidden_size,
-            d_ff=hyperparameters.d_ff,
-            n_heads=hyperparameters.n_heads,
-            n_layers=hyperparameters.num_layers,
-            dropout=hyperparameters.dropout,
+            d_model=self.hparams.hidden_size,
+            d_ff=self.hparams.d_ff,
+            n_heads=self.hparams.n_heads,
+            n_layers=self.hparams.num_layers,
+            dropout=self.hparams.dropout,
         )
 
-        self.fc_offline = nn.Linear(hyperparameters.hidden_size, window_size * num_out_classes)
+        self.head = ModelHead(
+            hidden_size=self.hparams.hidden_size,
+            n_layers = self.hparams.num_head_layers,
+            k = self.hparams.k,
+            dropout = self.hparams.dropout,
+            output_size = self.num_out_classes,
+            loss_type = self.hparams.loss_type,
+            head_act = self.hparams.head_act,
+            task = self.hparams.task,
+            gap = self.hparams.gap
+        )
 
         #NOTE: Layers not used
         # self.positional_encoding = PositionalEncoding(
@@ -75,7 +91,9 @@ class TransformerModel(nn.Module):
         #     max_len=window_size,
         # )
 
+        # self.fc_offline = nn.Linear(self.hparams.hidden_size, window_size * self.num_out_classes)
         # self.fc_online = nn.Linear(hyperparameters.hidden_size, num_out_classes)
+
 
     def forward(self, x, mask=None):
         if mask is None:
@@ -83,8 +101,7 @@ class TransformerModel(nn.Module):
 
         x = self.input_projection(x)  # (B,L,D) -> (B,L,H)
         x = self.dynamic_positional_encoding(x) # (B,L,H) -> (B,L,H)
-
         x = self.encoder(x, mask)  # (B,L,H) -> (B,L,H)
+        x = self.head(x)  # (B,L,H) -> (B,L,D)
 
-        x = self.fc_online(x)  # (B,L,H) -> (B,L,D)
         return x

@@ -1,7 +1,13 @@
 _target_: src.hyperparameters.transformer_hyperparameters.TransformerHyperparameters
 
 num_layers: MISSING
+dropout: MISSING
 hidden_size: MISSING
 d_ff: MISSING
 n_heads: MISSING
-dropout: MISSING
+num_head_layers: MISSING
+k: MISSING
+head_act: MISSING
+loss_type: MISSING
+task: MISSING
+gap: MISSING
