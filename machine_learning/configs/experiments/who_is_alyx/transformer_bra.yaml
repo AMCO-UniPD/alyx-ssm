@@ -38,9 +38,9 @@ model:
   num_out_classes: "auto"
   window_size: ${datamodule.data_hyperparameters.window_size}
   hyperparameters:
-    num_layers: 5
-    dropout: 0.2
-    hidden_size: 128
+    num_layers: 3
+    dropout: 0.44
+    hidden_size: 256
     d_ff: 64
     n_heads: 8
     num_head_layers: 2
