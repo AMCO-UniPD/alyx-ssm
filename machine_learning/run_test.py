@@ -2,7 +2,11 @@
 Python script to launch the training experiment
 """
 
+import ipdb
+import glob
+import os
 import signal
+from pathlib import Path
 
 import dotenv
 import hydra
@@ -16,8 +20,9 @@ dotenv.load_dotenv(override=True)
 
 log = utils.get_logger(__name__)
 
+outputs_path = Path(Path.home() / "alyx-ssm" / "machine_learning" / "multirun")
 
-@hydra.main(config_path="configs/", config_name="config.yaml", version_base="1.1")
+@hydra.main(config_path="configs/", config_name="test_config.yaml", version_base="1.1")
 def main(config: DictConfig):
 
     # Imports should be nested inside @hydra.main to optimize tab completion
@@ -36,10 +41,26 @@ def main(config: DictConfig):
     if config.get("print_config"):
         utils.print_config(config, resolve=True)
 
-    # Add path to model
-    path_to_model = "/home/fabrizio_genilotti/alyx-ssm/machine_learning/outputs/2026-01-31/01-28-35/checkpoints/best_mean_accuracy_val-epoch_022.ckpt"
+    #NOTE: Automatic computation of the model checkpoint path
 
-    # Train model
+    model_day_dirpath = utils.get_most_recent_dir(str(outputs_path))
+    model_hour_dirpath = utils.get_most_recent_dir(model_day_dirpath)
+    model_checkpoint_dirpath = utils.generate_path(
+        basepath = model_hour_dirpath,
+        folders = [
+            str(config.run_number),
+            "checkpoints"
+        ]
+    )
+
+    file_strategy = os.path.join(model_checkpoint_dirpath,f"*{config.strategy}_val-epoch_{config.best_epoch}*.ckpt")
+    path_to_model = glob.glob(file_strategy)[0]
+
+    print("-"*50)
+    print(f"Test experiment on {path_to_model} model checkpoint")
+    print("-"*50)
+
+    # Test model
     return test(config, path_to_model)
 
 

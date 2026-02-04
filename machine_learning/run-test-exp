@@ -7,14 +7,17 @@ data_encoding="${3:-bra}"
 config_file="${model_name}_${data_encoding}.yaml"
 
 echo "-------------------------------------------"
-echo "Starting training experiment"
+echo "Starting test experiment"
 echo "device: $device_num"
 echo "model: $model_name"
 echo "data encoding: $data_encoding"
 echo "config file: $config_file"
 echo "-------------------------------------------"
 
+echo "-------------------------------------------"
+echo "Starting test experiment"
+echo "-------------------------------------------"
+
 CUDA_VISIBLE_DEVICES=$device_num \
 HYDRA_FULL_ERROR=1 \
-uv run run.py -m +experiments/who_is_alyx="$config_file" seed=1,2,42
-
+uv run run_test.py +experiments/who_is_alyx="$config_file"
