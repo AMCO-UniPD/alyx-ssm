@@ -6,7 +6,7 @@ defaults:
   - override /lightning_module: classification_module.yaml
   - override /callbacks: cnn_classification.yaml
 
-run_group: cnn_bra
+run_group: transformer_br
 
 cache_datamodule: False
 
@@ -16,19 +16,20 @@ logger:
   wandb:
     project: "Who-Is-Alyx"
     entity: ""
+    name: transformer_br
 
 trainer:
   #gpus: 1 # deprecated
   accelerator: gpu
   devices: 1
-  min_epochs: 20
-  max_epochs: 20
+  min_epochs: 10
+  max_epochs: 30
   #auto_scale_batch_size: True # deprecated
   check_val_every_n_epoch: 1
 
 tuner:
   scale_batch_size:
-    enabled: True
+    enabled: False
     mode: "power"
     #init_val: 16 # handled by datamodule config
     max_trials: 8
@@ -37,11 +38,17 @@ model:
   num_out_classes: "auto"
   window_size: ${datamodule.data_hyperparameters.window_size}
   hyperparameters:
-    num_layers: 2
-    dropout: 0.2
-    hidden_size: 128
+    num_layers: 3
+    dropout: 0.44
+    hidden_size: 256
     d_ff: 64
     n_heads: 8
+    num_head_layers: 2
+    k: 1
+    head_act: "relu"
+    loss_type: "CE"
+    task: "classification"
+    gap: True
 
 datamodule:
   data_path: ${data_dir}/15_fps_classifier_71_subjects.hdf5

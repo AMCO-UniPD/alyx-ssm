@@ -18,8 +18,19 @@ echo "-------------------------------------------"
 
 CUDA_VISIBLE_DEVICES=$device_num \
 HYDRA_FULL_ERROR=1 \
-uv run run.py -m \
+python run.py -m \
   +experiments/who_is_alyx="$config_file" \
   seed=1,2,42 \
   data_dir="$data_dir"
 
+echo "-------------------------------------------"
+echo "Starting test experiment"
+echo "-------------------------------------------"
+
+CUDA_VISIBLE_DEVICES=$device_num \
+HYDRA_FULL_ERROR=1 \
+python run_test.py -m \
+  +experiments/who_is_alyx="$config_file" \
+  seed=1,2,42 \
+  run_number=0,1,2 \
+  data_dir="$data_dir"
