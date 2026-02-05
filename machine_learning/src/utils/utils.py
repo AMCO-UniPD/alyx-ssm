@@ -1,3 +1,4 @@
+import ipdb
 import logging
 import os
 import warnings
@@ -267,3 +268,24 @@ def get_most_recent_dir(dirpath: str, file_pos: int = 0) -> str:
     paths = [os.path.join(dirpath, basename) for basename in dirs]
     sorted_paths = sorted(paths, key=os.path.getmtime)[::-1]
     return sorted_paths[file_pos]
+
+def get_results_path(config: DictConfig) -> str:
+    """
+    This function returns the directory path containing all the results of
+    a specific hydra run.
+
+    Args:
+        config (DictConfig): experiment configuration
+
+    Returns:
+        results_dirpath (str): results dirpath
+    """
+
+    ml_path = Path(Path.home() / "alyx-ssm" / "machine_learning")
+
+    outputs_path = os.path.join(ml_path,"multirun") if config.multirun else os.path.join(ml_path,"outputs")
+
+    model_day_dirpath = get_most_recent_dir(outputs_path,file_pos=config.day_file_pos)
+    results_dirpath = get_most_recent_dir(model_day_dirpath,file_pos=config.hour_file_pos)
+
+    return results_dirpath

@@ -42,17 +42,12 @@ def main(config: DictConfig):
 
     #NOTE: Automatic computation of the model checkpoint path
 
-    ml_path = Path(Path.home() / "alyx-ssm" / "machine_learning")
-
-    outputs_path = os.path.join(ml_path,"multirun") if config.multirun else os.path.join(ml_path,"outputs")
-
-    model_day_dirpath = utils.get_most_recent_dir(outputs_path)
-    model_hour_dirpath = utils.get_most_recent_dir(model_day_dirpath)
+    results_dirpath = utils.get_results_path(config=config)
 
     if config.multirun:
 
         model_checkpoint_dirpath = utils.generate_path(
-            basepath = model_hour_dirpath,
+            basepath = results_dirpath,
             folders = [
                 str(config.run_number),
                 "checkpoints"
@@ -62,7 +57,7 @@ def main(config: DictConfig):
     else:
 
         model_checkpoint_dirpath = utils.generate_path(
-            basepath = model_hour_dirpath,
+            basepath = results_dirpath,
             folders = ["checkpoints"]
         )
 

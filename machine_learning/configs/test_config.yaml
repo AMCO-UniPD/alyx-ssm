@@ -48,6 +48,7 @@ seed: 42
 # parameters to automatically compute the model checkpoint path
 
 multirun: True
+n_runs: 3
 run_number: 0
 strategy: "mean_accuracy"
 file_pos: 0

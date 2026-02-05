@@ -1,0 +1,8 @@
+#NOTE: results script config
+
+print_config: False
+multirun: True
+n_runs: 3
+day_file_pos: 0
+hour_file_pos: 0
+save_df: True

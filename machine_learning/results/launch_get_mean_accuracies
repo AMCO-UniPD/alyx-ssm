@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+script_path="get_mean_accuracies.py"
+
+day_file_pos=${1:-0}
+hour_file_pos=${2:-0}
+multirun=${3:-0}
+
+echo "-------------------------------------------"
+echo "Executing $script_path script"
+echo "day_file_pos: $day_file_pos"
+echo "hour_file_pos: $hour_file_pos"
+echo "-------------------------------------------"
+
+n_runs=3
+
+if [[ $multirun != 0 ]]; then
+
+  python $script_path \
+    multirun=False \
+    n_runs=$n_runs \
+    day_file_pos=$day_file_pos \
+    hour_file_pos=$hour_file_pos
+
+else
+
+  python $script_path \
+    multirun=True \
+    n_runs=$n_runs \
+    day_file_pos=$day_file_pos \
+    hour_file_pos=$hour_file_pos
+
+fi
+
