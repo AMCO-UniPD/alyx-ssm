@@ -24,14 +24,6 @@ defaults:
 # learn more here: https://hydra.cc/docs/next/tutorials/basic/running_your_app/working_directory
 work_dir: ${hydra:runtime.cwd}
 
-#NOTE: Config to change the name of the directory where
-# results are saved
-
-hydra:
-  sweep:
-    dir: multirun
-    subdir: ${hydra.job.override_dirname}
-
 # path to folder with data
 data_dir: /mnt/disk1/datasets/alyx
 

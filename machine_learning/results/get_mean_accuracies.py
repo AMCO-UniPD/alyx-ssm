@@ -36,7 +36,6 @@ def main(config: DictConfig):
         utils.print_config(config, resolve=True)
 
     results_dirpath = utils.get_results_path(config=config)
-
     acc_dfs, acc_vals = [], []
 
     for run in range(config.n_runs):
@@ -58,11 +57,6 @@ def main(config: DictConfig):
 
     mean_acc_df = acc_dfs[0].copy()
 
-    #TODO: Compute more statistics (each one in its column)
-    # - median
-    # - std
-    # - quantile 0.1
-    # - quantile 0.9
     mean_acc_df.drop("value",axis=1,inplace=True)
     mean_acc_df["value_mean"] = np.mean(acc_vals,axis=0)
     mean_acc_df["value_median"] = np.median(acc_vals,axis=0)

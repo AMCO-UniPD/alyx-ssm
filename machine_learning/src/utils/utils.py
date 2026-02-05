@@ -285,7 +285,9 @@ def get_results_path(config: DictConfig) -> str:
 
     outputs_path = os.path.join(ml_path,"multirun") if config.multirun else os.path.join(ml_path,"outputs")
 
-    model_day_dirpath = get_most_recent_dir(outputs_path,file_pos=config.day_file_pos)
-    results_dirpath = get_most_recent_dir(model_day_dirpath,file_pos=config.hour_file_pos)
+    model_enc_dirpath = os.path.join(outputs_path,config.model_name,config.data_encoding)
+
+    model_day_dirpath = get_most_recent_dir(model_enc_dirpath)
+    results_dirpath = get_most_recent_dir(model_day_dirpath)
 
     return results_dirpath

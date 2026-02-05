@@ -1,5 +1,8 @@
 #NOTE: results script config
 
+model_name: "transformer"
+data_encoding: "bra"
+
 print_config: False
 multirun: True
 n_runs: 3
@@ -7,4 +10,3 @@ day_file_pos: 0
 hour_file_pos: 0
 save_df: True
 
-metric: "top1"
