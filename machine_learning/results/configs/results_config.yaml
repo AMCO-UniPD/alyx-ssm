@@ -6,3 +6,5 @@ n_runs: 3
 day_file_pos: 0
 hour_file_pos: 0
 save_df: True
+
+metric: "top1"

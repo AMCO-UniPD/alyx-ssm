@@ -63,7 +63,12 @@ def main(config: DictConfig):
     # - std
     # - quantile 0.1
     # - quantile 0.9
-    mean_acc_df["value"] = np.mean(acc_vals,axis=0)
+    mean_acc_df.drop("value",axis=1,inplace=True)
+    mean_acc_df["value_mean"] = np.mean(acc_vals,axis=0)
+    mean_acc_df["value_median"] = np.median(acc_vals,axis=0)
+    mean_acc_df["value_std"] = np.std(acc_vals,axis=0)
+    mean_acc_df["value_quantile_01"] = np.quantile(acc_vals,0.1,axis=0)
+    mean_acc_df["value_quantile_09"] = np.quantile(acc_vals,0.9,axis=0)
 
     if config.save_df:
         filepath = os.path.join(results_dirpath,"mean_acc_df.csv")
