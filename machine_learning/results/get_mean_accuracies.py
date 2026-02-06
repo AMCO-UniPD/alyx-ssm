@@ -65,7 +65,7 @@ def main(config: DictConfig):
     mean_acc_df["value_quantile_09"] = np.quantile(acc_vals,0.9,axis=0)
 
     if config.save_df:
-        filepath = os.path.join(results_dirpath,"mean_acc_df.csv")
+        filepath = os.path.join(results_dirpath,f"mean_acc_df_{config.model_name}_{config.data_encoding}.csv")
         mean_acc_df.to_csv(filepath,index=False)
         print("-"*50)
         print(f"Mean accuracies dataframe saved at: {filepath}")
