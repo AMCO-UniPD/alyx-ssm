@@ -160,3 +160,6 @@ lightning_logs/
 
 # csv files
 *.csv
+
+# png files
+*.png
